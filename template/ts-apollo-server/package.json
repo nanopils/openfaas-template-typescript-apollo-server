@@ -1,0 +1,39 @@
+{
+  "name": "typescript-apollo",
+  "version": "1.0.0",
+  "config": {
+    "name": "apollofunc"
+  },
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": " NODE_ENV=develope ts-node index.ts",
+    "build-fn": "copyfiles -f ./package.json function",
+    "build-ts": "tsc",
+    "build": "npm run build-fn && faas-cli build -f $npm_package_config_name.yml",
+    "deploy": "faas-cli deploy -f $npm_package_config_name.yml",
+    "up": "npm run build && npm run deploy"
+  },
+  "keywords": [
+    "Openfaas",
+    "Graphql",
+    "Apollo",
+    "Serverless",
+    "FaaS"
+  ],
+  "author": "Philipp Schmid",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-express": "^2.3.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.2",
+    "graphql": "14.1.1",
+    "typescript": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/graphql": "^14.0.5",
+    "ts-node": "^8.0.2",
+    "copyfiles": "^2.1.0"
+  }
+}
