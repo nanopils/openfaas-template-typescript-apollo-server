@@ -1,5 +1,5 @@
 {
-  "name": "typescript-apollo",
+  "name": "ts-apollo-server",
   "version": "1.0.0",
   "config": {
     "name": "apollofunc"
@@ -29,6 +29,7 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.2",
     "graphql": "14.1.1",
+    "type-graphql": "^1.1.1",
     "typescript": "^3.3.1"
   },
   "devDependencies": {
