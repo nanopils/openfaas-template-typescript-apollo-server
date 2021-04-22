@@ -1,9 +1,17 @@
 /** @format */
 
-import {gql} from 'apollo-server-express'
+import 'reflect-metadata';
+import { Field, ID, ObjectType } from 'type-graphql';
 
-export const typeDefs: any = gql`
-  type Query {
-    hello(text: String): String
-  }
-`
+export interface IUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
+@ObjectType()
+export class User implements IUser {
+  @Field(() => ID) id: string;
+  @Field({ nullable: true}) firstName: string;
+  @Field({ nullable: true}) lastName: string;
+}
