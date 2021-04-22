@@ -53,7 +53,8 @@ RUN chown app:app -R /home/app \
 
 USER app
 
-
+# Debug port for Chrome Dev Tools
+EXPOSE 9229
 
 ENV cgi_headers="true"
 # ENV fprocess="node index.js"

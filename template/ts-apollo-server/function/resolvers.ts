@@ -20,7 +20,7 @@ export const resolveUserReference = async (reference: Pick<IUser, 'id'>): Promis
  * Resolver
  */
 @Resolver(() => User)
-export default class UserResolver {
+export class UserResolver {
   @Query(() => [User])
   async allUsers(): Promise<IUser[]> {
     return mockUsers;
@@ -30,3 +30,7 @@ export default class UserResolver {
     return findUserByID(id);
   }
 }
+
+export default [
+  UserResolver,
+];
