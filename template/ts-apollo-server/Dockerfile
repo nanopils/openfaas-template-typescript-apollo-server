@@ -28,6 +28,7 @@ RUN npm i
 
 # Copy outer function handler
 COPY index.ts ./
+COPY buildFederatedSchema.ts ./
 
 
 # COPY function node packages and install, adding this as a separate

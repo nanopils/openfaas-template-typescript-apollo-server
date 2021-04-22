@@ -27,5 +27,5 @@
     "skipLibCheck": true
   },
   "exclude": ["node_modules", "test"],
-  "include": ["**/*"]
+  "include": ["**/*", "buildFederatedSchema.ts"]
 }
