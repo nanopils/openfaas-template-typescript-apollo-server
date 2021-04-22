@@ -13,18 +13,15 @@ import resolvers, { orphanedTypes, resolveUserReference } from './function/resol
 
 const app = express();
 
+const port = process.env.PORT || 3000;
+
+const apolloKey = process.env.APOLLO_KEY;
+const apolloSchemaConfigDeliveryEndpoint = process.env.APOLLO_SCHEMA_CONFIG_DELIVERY_ENDPOINT;
+
 const debug = !!process.env.APOLLO_DEBUG ? process.env.APOLLO_DEBUG === 'true' : false;
 const introspection = !!process.env.APOLLO_INTROSPECTION ? process.env.APOLLO_INTROSPECTION === 'true' : true;
 const playground = !!process.env.APOLLO_PLAYGROUND ? process.env.APOLLO_PLAYGROUND === 'true' : false;
 const debugSchemaPath = path.resolve(__dirname, 'schema.gql');
-
-if (process.env.NODE_ENV === 'develope') {
-  require('dotenv').config({path: './function/.env.dev'});
-} else if (process.env.NODE_ENV === 'production') {
-  require('dotenv').config({path: './function/.env.prod'});
-} else {
-  throw new Error('no Process Enviromnet Variable defined');
-}
 
 async function startServer() {
 
@@ -54,10 +51,12 @@ async function startServer() {
 
   server.applyMiddleware({app});
 
-  const port = process.env.http_port || 3000;
-
   app.listen(port, () => {
     console.log(`🚀 OpenFaaS GraphQL listening on port: ${port}`);
+    if (!!apolloKey) {
+      // ToDo: run rover with the new schema!
+      console.log(`Updated Apollo Studio schema!`);
+    }
   });
 };
 
