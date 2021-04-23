@@ -9,7 +9,7 @@ import { ApolloServer } from 'apollo-server-express';
 import { buildFederatedSchema } from './buildFederatedSchema';
 
 import { authChecker } from './function/auth';
-import resolvers, { orphanedTypes, resolveUserReference } from './function/resolvers';
+import resolvers, { orphanedTypes, federationResolvers } from './function/resolvers';
 
 const app = express();
 
@@ -35,7 +35,7 @@ async function startServer() {
       orphanedTypes,
     },
     {
-      User: { __resolveReference: resolveUserReference },
+      ...federationResolvers,
     },
   );
 

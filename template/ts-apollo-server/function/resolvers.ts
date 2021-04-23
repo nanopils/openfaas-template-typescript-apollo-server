@@ -14,7 +14,11 @@ export const findUserByID = async (id: string): Promise<IUser> => mockUsers.find
  */
 export const orphanedTypes = [User];
 
-export const resolveUserReference = async (reference: Pick<IUser, 'id'>): Promise<IUser> => findUserByID(reference.id);
+const resolveUserReference = async (reference: Pick<IUser, 'id'>): Promise<IUser> => findUserByID(reference.id);
+
+export const federationResolvers = {
+  User: { __resolveReference: resolveUserReference },
+};
 
 /**
  * Resolver
