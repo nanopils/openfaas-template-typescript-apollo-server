@@ -25,7 +25,6 @@ const updateApolloStudioSubgraph = async () => {
   const vars =
     typeof getEnvironmentVariables === 'function' ? await getEnvironmentVariables(process.env) : { ...process.env };
   const apolloKey = vars?.APOLLO_KEY;
-  const apolloSchemaConfigDeliveryEndpoint = vars?.APOLLO_SCHEMA_CONFIG_DELIVERY_ENDPOINT;
 
   if (!!apolloKey) {
     // ToDo: run rover with the new schema!
