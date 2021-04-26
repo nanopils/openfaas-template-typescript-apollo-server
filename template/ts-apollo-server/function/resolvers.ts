@@ -1,5 +1,7 @@
-import { Arg, Query, Resolver } from "type-graphql";
-import { IUser, User } from "./typeDefs";
+/** @format */
+
+import { Arg, Query, Resolver } from 'type-graphql';
+import { IUser, User } from './typeDefs';
 
 const mockUsers: IUser[] = [
   { id: '123', firstName: 'Bilbo', lastName: 'Baggins' },
@@ -7,7 +9,7 @@ const mockUsers: IUser[] = [
   { id: '789', firstName: 'Lord', lastName: 'Sauron' },
 ];
 
-export const findUserByID = async (id: string): Promise<IUser> => mockUsers.find((user) => user.id === id) || null;
+export const findUserByID = async (id: string): Promise<IUser> => mockUsers.find(user => user.id === id) || null;
 
 /**
  * Apollo Federation
@@ -19,6 +21,10 @@ const resolveUserReference = async (reference: Pick<IUser, 'id'>): Promise<IUser
 export const federationResolvers = {
   User: { __resolveReference: resolveUserReference },
 };
+
+export const getEnvironmentVariables = async (vars = process.env) => ({
+  ...vars,
+});
 
 /**
  * Resolver
@@ -35,6 +41,4 @@ export class UserResolver {
   }
 }
 
-export default [
-  UserResolver,
-];
+export default [UserResolver];
