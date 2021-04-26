@@ -10,27 +10,29 @@ import { ApolloServer } from 'apollo-server-express';
 import { buildFederatedSchema } from './buildFederatedSchema';
 
 import { authChecker } from './function/auth';
-import resolvers, { orphanedTypes, federationResolvers } from './function/resolvers';
+import resolvers, { orphanedTypes, federationResolvers, getEnvironmentVariables } from './function/resolvers';
 
 const app = express();
 
-const port = process.env.PORT || 3000;
+const port = process.env?.PORT || 3000;
 
-const apolloKey = process.env.APOLLO_KEY;
-const apolloSchemaConfigDeliveryEndpoint = process.env.APOLLO_SCHEMA_CONFIG_DELIVERY_ENDPOINT;
-
-const debug = !!process.env.APOLLO_DEBUG ? process.env.APOLLO_DEBUG === 'true' : false;
-const introspection = !!process.env.APOLLO_INTROSPECTION ? process.env.APOLLO_INTROSPECTION === 'true' : true;
-const playground = !!process.env.APOLLO_PLAYGROUND ? process.env.APOLLO_PLAYGROUND === 'true' : false;
+const debug = !!process.env?.APOLLO_DEBUG ? process.env?.APOLLO_DEBUG === 'true' : false;
+const introspection = !!process.env?.APOLLO_INTROSPECTION ? process.env?.APOLLO_INTROSPECTION === 'true' : true;
+const playground = !!process.env?.APOLLO_PLAYGROUND ? process.env?.APOLLO_PLAYGROUND === 'true' : false;
 const debugSchemaPath = path.resolve(__dirname, 'schema.gql');
 
 const updateApolloStudioSubgraph = async () => {
+  const vars =
+    typeof getEnvironmentVariables === 'function' ? await getEnvironmentVariables(process.env) : { ...process.env };
+  const apolloKey = vars?.APOLLO_KEY;
+  const apolloSchemaConfigDeliveryEndpoint = vars?.APOLLO_SCHEMA_CONFIG_DELIVERY_ENDPOINT;
+
   if (!!apolloKey) {
     // ToDo: run rover with the new schema!
-    const ip = process.env?.OPENFAAS_IP || null;
-    const profile = process.env?.APOLLO_STUDIO_PROFILE || null;
-    const functionName = process.env?.OPENFAAS_FUNCTION || null;
-    const supergraphName = process.env?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
+    const ip = vars?.OPENFAAS_IP || null;
+    const profile = vars?.APOLLO_STUDIO_PROFILE || null;
+    const functionName = vars?.OPENFAAS_FUNCTION || null;
+    const supergraphName = vars?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
     if (!ip || !profile || !functionName || !supergraphName) {
       console.error(`You should provide the following in order to update the Apollo Studio subgraph:
         - OpenFAAS public IP
