@@ -28,8 +28,8 @@ const updateApolloStudioSubgraph = async () => {
   if (!!apolloKey) {
     // ToDo: run rover with the new schema!
     const ip = process.env?.OPENFAAS_IP || null;
-    const profile = process.env?.APOLLO_STUDIO_PROFILE; || null;
-    const functionName = process.env?.OPENFAAS_FUNCTION; || null;
+    const profile = process.env?.APOLLO_STUDIO_PROFILE || null;
+    const functionName = process.env?.OPENFAAS_FUNCTION || null;
     const supergraphName = process.env?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
     if (!ip || !profile || !functionName || !supergraphName) {
       console.error(`You should provide the following in order to update the Apollo Studio subgraph:
@@ -46,24 +46,25 @@ const updateApolloStudioSubgraph = async () => {
     // deploy-managed-federation-schema.sh
     console.log(`Updated Apollo Studio schema!`);
     exec(
-      `rover subgraph publish \
+      `npx rover subgraph publish \
         --schema "schema.gql" \
         --name "${functionName}" \
         --profile "${profile}" \
         --routing-url "${routingUrl}" \
         "${graphRef}"`,
-        (err, stdout, stderr) => {
-      if (err) {
-        //some err occurred
-        console.error(err)
-      } else {
-      // the *entire* stdout and stderr (buffered)
-      console.log(`stdout: ${stdout}`);
-      console.log(`stderr: ${stderr}`);
-      }
-    });
+      (err, stdout, stderr) => {
+        if (err) {
+          //some err occurred
+          console.error(err);
+        } else {
+          // the *entire* stdout and stderr (buffered)
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`);
+        }
+      },
+    );
   }
-}; 
+};
 
 async function startServer() {
   const schema = await buildFederatedSchema(
@@ -91,7 +92,7 @@ async function startServer() {
 
   server.applyMiddleware({ app });
 
-  app.listen(port, () => {
+  app.listen(port, async () => {
     console.log(`🚀 OpenFaaS GraphQL listening on port: ${port}`);
     await updateApolloStudioSubgraph();
   });
