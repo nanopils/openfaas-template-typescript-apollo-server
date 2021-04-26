@@ -37,8 +37,6 @@ COPY buildFederatedSchema.ts ./
 WORKDIR /home/app/function
 COPY function/*.json ./
 
-RUN npm install -g @apollo/rover
-
 RUN npm i || :
 
 # COPY function files and folders
