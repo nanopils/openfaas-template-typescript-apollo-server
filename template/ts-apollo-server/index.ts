@@ -22,7 +22,7 @@ const playground = !!process.env?.APOLLO_PLAYGROUND ? process.env?.APOLLO_PLAYGR
 const debugSchemaPath = path.resolve(__dirname, 'schema.gql');
 
 const updateApolloStudioSubgraph = async () => {
-  const vars =
+  const vars: { [key: string]: any } =
     typeof getEnvironmentVariables === 'function' ? await getEnvironmentVariables(process.env) : { ...process.env };
   const apolloKey = vars?.APOLLO_KEY;
 
@@ -44,8 +44,6 @@ const updateApolloStudioSubgraph = async () => {
     const routingUrl = `http://${ip}:8080/function/ecom-fn-graphql-${functionName}/graphql`;
     const graphRef = `${supergraphName}@${profile}`;
 
-    // deploy-managed-federation-schema.sh
-    console.log(`Updated Apollo Studio schema!`);
     exec(
       `npx rover subgraph publish \
         --schema "schema.gql" \
@@ -64,6 +62,7 @@ const updateApolloStudioSubgraph = async () => {
         }
       },
     );
+    console.log(`Updated Apollo Studio schema!`);
   }
 };
 
