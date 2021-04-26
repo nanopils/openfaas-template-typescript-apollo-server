@@ -7,6 +7,7 @@ RUN apk --no-cache add curl ca-certificates \
     && echo "Pulling watchdog binary from Github." \
     && curl -sSLf https://github.com/openfaas-incubator/of-watchdog/releases/download/0.4.6/of-watchdog > /usr/bin/fwatchdog \
     && chmod +x /usr/bin/fwatchdog \
+    && curl -sSL https://rover.apollo.dev/nix/latest | sh \
     && apk del curl
 
 WORKDIR /root/

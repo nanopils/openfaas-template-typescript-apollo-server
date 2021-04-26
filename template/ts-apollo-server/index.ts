@@ -45,7 +45,7 @@ const updateApolloStudioSubgraph = async () => {
     const graphRef = `${supergraphName}@${profile}`;
 
     exec(
-      `npx rover subgraph publish \
+      `rover subgraph publish \
         --schema "schema.gql" \
         --name "${functionName}" \
         --profile "${profile}" \
