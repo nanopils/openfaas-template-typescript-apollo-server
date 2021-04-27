@@ -32,9 +32,10 @@ const updateApolloStudioSubgraph = async () => {
     // ToDo: run rover with the new schema!
     const ip = vars?.OPENFAAS_IP || null;
     const profile = vars?.APOLLO_STUDIO_PROFILE || null;
-    const functionName = vars?.OPENFAAS_FUNCTION || null;
+    const serviceName = vars?.OPENFAAS_SERVICE_NAME || null;
+    const functionName = vars?.OPENFAAS_FUNCTION_NAME || null;
     const supergraphName = vars?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
-    if (!ip || !profile || !functionName || !supergraphName) {
+    if (!ip || !profile || !serviceName || !supergraphName) {
       console.error(`You should provide the following in order to update the Apollo Studio subgraph:
         - OpenFAAS public IP
         - the OpenFAAS function name
@@ -43,13 +44,13 @@ const updateApolloStudioSubgraph = async () => {
       `);
       return;
     }
-    const routingUrl = `http://${ip}:8080/function/ecom-fn-graphql-${functionName}/graphql`;
+    const routingUrl = `http://${functionName}:8080/graphql`;
     const graphRef = `${supergraphName}@${profile}`;
 
     // exec(
     //   `rover subgraph publish \
     //     --schema "schema.gql" \
-    //     --name "${functionName}" \
+    //     --name "${serviceName}" \
     //     --profile "${profile}" \
     //     --routing-url "${routingUrl}" \
     //     "${graphRef}"`,
@@ -64,6 +65,26 @@ const updateApolloStudioSubgraph = async () => {
     //     }
     //   },
     // );
+
+    exec(
+      `npx apollo service:push \
+        --graph="${supergraphName}" \
+        --key="${apolloKey}" \
+        --variant="${apolloGraphVariant}" \
+        --serviceName="${serviceName}" \
+        --serviceURL="${routingUrl}" \
+        --localSchemaFile=./schema.gql`,
+      (err, stdout, stderr) => {
+        if (err) {
+          //some err occurred
+          console.error(err);
+        } else {
+          // the *entire* stdout and stderr (buffered)
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`);
+        }
+      },
+    );
     console.log(`Updated Apollo Studio schema!`, routingUrl, graphRef, apolloGraphVariant, apolloSchemaReporting);
   }
 };
