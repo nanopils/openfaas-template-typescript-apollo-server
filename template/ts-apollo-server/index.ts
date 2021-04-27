@@ -25,6 +25,8 @@ const updateApolloStudioSubgraph = async () => {
   const vars: { [key: string]: any } =
     typeof getEnvironmentVariables === 'function' ? await getEnvironmentVariables(process.env) : { ...process.env };
   const apolloKey = vars?.APOLLO_KEY;
+  const apolloGraphVariant = vars?.APOLLO_GRAPH_VARIANT;
+  const apolloSchemaReporting = vars?.APOLLO_SCHEMA_REPORTING;
 
   if (!!apolloKey) {
     // ToDo: run rover with the new schema!
@@ -44,25 +46,25 @@ const updateApolloStudioSubgraph = async () => {
     const routingUrl = `http://${ip}:8080/function/ecom-fn-graphql-${functionName}/graphql`;
     const graphRef = `${supergraphName}@${profile}`;
 
-    exec(
-      `rover subgraph publish \
-        --schema "schema.gql" \
-        --name "${functionName}" \
-        --profile "${profile}" \
-        --routing-url "${routingUrl}" \
-        "${graphRef}"`,
-      (err, stdout, stderr) => {
-        if (err) {
-          //some err occurred
-          console.error(err);
-        } else {
-          // the *entire* stdout and stderr (buffered)
-          console.log(`stdout: ${stdout}`);
-          console.log(`stderr: ${stderr}`);
-        }
-      },
-    );
-    console.log(`Updated Apollo Studio schema!`);
+    // exec(
+    //   `rover subgraph publish \
+    //     --schema "schema.gql" \
+    //     --name "${functionName}" \
+    //     --profile "${profile}" \
+    //     --routing-url "${routingUrl}" \
+    //     "${graphRef}"`,
+    //   (err, stdout, stderr) => {
+    //     if (err) {
+    //       //some err occurred
+    //       console.error(err);
+    //     } else {
+    //       // the *entire* stdout and stderr (buffered)
+    //       console.log(`stdout: ${stdout}`);
+    //       console.log(`stderr: ${stderr}`);
+    //     }
+    //   },
+    // );
+    console.log(`Updated Apollo Studio schema!`, routingUrl, graphRef, apolloGraphVariant, apolloSchemaReporting);
   }
 };
 
