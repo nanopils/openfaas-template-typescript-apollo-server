@@ -65,7 +65,22 @@ const updateApolloStudioSubgraph = async () => {
     //     }
     //   },
     // );
-
+    const schemaFile = 'apollo-schema.graphql';
+    exec(
+      `npx apollo client:download-schema \
+        --endpoint=http://localhost:8080/graphql \
+        ${schemaFile}`,
+      (err, stdout, stderr) => {
+        if (err) {
+          //some err occurred
+          console.error(err);
+        } else {
+          // the *entire* stdout and stderr (buffered)
+          console.log(`stdout: ${stdout}`);
+          console.log(`stderr: ${stderr}`);
+        }
+      },
+    );
     exec(
       `npx apollo service:push \
         --graph="${supergraphName}" \
@@ -73,7 +88,7 @@ const updateApolloStudioSubgraph = async () => {
         --variant="${apolloGraphVariant}" \
         --serviceName="${serviceName}" \
         --serviceURL="${routingUrl}" \
-        --localSchemaFile=./schema.gql`,
+        --localSchemaFile=./${schemaFile}`,
       (err, stdout, stderr) => {
         if (err) {
           //some err occurred
