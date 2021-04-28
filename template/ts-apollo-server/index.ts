@@ -4,7 +4,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import 'reflect-metadata';
 import * as path from 'path';
-import util from 'util';
+import { promisify } from 'util';
 import { exec as execSync } from 'child_process';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
@@ -13,7 +13,7 @@ import { buildFederatedSchema } from './buildFederatedSchema';
 import { authChecker } from './function/auth';
 import resolvers, { orphanedTypes, federationResolvers, getEnvironmentVariables } from './function/resolvers';
 
-const exec = util.promisify(execSync);
+const exec = promisify(execSync);
 
 const app = express();
 
