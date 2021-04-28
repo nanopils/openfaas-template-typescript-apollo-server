@@ -4,13 +4,16 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import 'reflect-metadata';
 import * as path from 'path';
-import { exec } from 'child_process';
+import util from 'util';
+import { exec as execSync } from 'child_process';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildFederatedSchema } from './buildFederatedSchema';
 
 import { authChecker } from './function/auth';
 import resolvers, { orphanedTypes, federationResolvers, getEnvironmentVariables } from './function/resolvers';
+
+const exec = util.promisify(execSync);
 
 const app = express();
 
@@ -66,22 +69,15 @@ const updateApolloStudioSubgraph = async () => {
     //   },
     // );
     const schemaFile = 'apollo-schema.graphql';
-    exec(
+    const { stdout, stderr } = await exec(
       `npx apollo client:download-schema \
         --endpoint=http://localhost:8080/graphql \
         ${schemaFile}`,
-      (err, stdout, stderr) => {
-        if (err) {
-          //some err occurred
-          console.error(err);
-        } else {
-          // the *entire* stdout and stderr (buffered)
-          console.log(`stdout: ${stdout}`);
-          console.log(`stderr: ${stderr}`);
-        }
-      },
     );
-    exec(
+    console.log(`stdout: ${stdout}`);
+    console.log(`stderr: ${stderr}`);
+
+    execSync(
       `npx apollo service:push \
         --graph="${supergraphName}" \
         --key="${apolloKey}" \
