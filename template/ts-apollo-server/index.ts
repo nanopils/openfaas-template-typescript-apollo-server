@@ -4,16 +4,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 import 'reflect-metadata';
 import * as path from 'path';
-import { promisify } from 'util';
-import { exec as execSync } from 'child_process';
+import { exec } from 'child_process';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildFederatedSchema } from './buildFederatedSchema';
 
 import { authChecker } from './function/auth';
 import resolvers, { orphanedTypes, federationResolvers, getEnvironmentVariables } from './function/resolvers';
-
-const exec = promisify(execSync);
 
 const app = express();
 
@@ -50,41 +47,14 @@ const updateApolloStudioSubgraph = async () => {
     const routingUrl = `http://${functionName}:8080/graphql`;
     const graphRef = `${supergraphName}@${profile}`;
 
-    // exec(
-    //   `rover subgraph publish \
-    //     --schema "schema.gql" \
-    //     --name "${serviceName}" \
-    //     --profile "${profile}" \
-    //     --routing-url "${routingUrl}" \
-    //     "${graphRef}"`,
-    //   (err, stdout, stderr) => {
-    //     if (err) {
-    //       //some err occurred
-    //       console.error(err);
-    //     } else {
-    //       // the *entire* stdout and stderr (buffered)
-    //       console.log(`stdout: ${stdout}`);
-    //       console.log(`stderr: ${stderr}`);
-    //     }
-    //   },
-    // );
-    const schemaFile = 'apollo-schema.graphql';
-    const { stdout, stderr } = await exec(
-      `npx apollo client:download-schema \
-        --endpoint=http://localhost:8080/graphql \
-        ${schemaFile}`,
-    );
-    console.log(`stdout: ${stdout}`);
-    console.log(`stderr: ${stderr}`);
-
-    execSync(
+    exec(
       `npx apollo service:push \
         --graph="${supergraphName}" \
         --key="${apolloKey}" \
         --variant="${apolloGraphVariant}" \
         --serviceName="${serviceName}" \
         --serviceURL="${routingUrl}" \
-        --localSchemaFile=./${schemaFile}`,
+        --endpoint="http://localhost:8080/graphql"`,
       (err, stdout, stderr) => {
         if (err) {
           //some err occurred
