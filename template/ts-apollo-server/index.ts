@@ -29,7 +29,6 @@ const updateApolloStudioSubgraph = async () => {
   const apolloSchemaReporting = vars?.APOLLO_SCHEMA_REPORTING;
 
   if (!!apolloKey) {
-    // ToDo: run rover with the new schema!
     const ip = vars?.OPENFAAS_IP || null;
     const profile = vars?.APOLLO_STUDIO_PROFILE || null;
     const serviceName = vars?.OPENFAAS_SERVICE_NAME || null;

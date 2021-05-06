@@ -18,8 +18,8 @@ RUN mkdir -p /home/app
 
 # Wrapper/boot-strapper
 WORKDIR /home/app
-COPY package.json ./ 
-COPY tsconfig.json ./
+COPY --chown=app:app package.json ./ 
+COPY --chown=app:app tsconfig.json ./
 
 
 # This ordering means the npm installation is cached for the outer function handler.
@@ -27,22 +27,22 @@ RUN npm i
 
 
 # Copy outer function handler
-COPY index.ts ./
-COPY buildFederatedSchema.ts ./
+COPY --chown=app:app index.ts ./
+COPY --chown=app:app buildFederatedSchema.ts ./
 
 
 # COPY function node packages and install, adding this as a separate
 # entry allows caching of npm install
 
 WORKDIR /home/app/function
-COPY function/*.json ./
-COPY function/.npmrc ./
+COPY --chown=app:app function/*.json ./
+COPY --chown=app:app function/.npmrc ./
 
 
 RUN npm i || :
 
 # COPY function files and folders
-COPY function/ ./
+COPY --chown=app:app function/ ./
 
 # Set correct permissions to use non root user
 WORKDIR /home/app/
@@ -50,8 +50,7 @@ WORKDIR /home/app/
 RUN npm run build-ts
 
 # chmod for tmp is for a buildkit issue (@alexellis)
-RUN chown app:app -R /home/app \
-    && chmod 777 /tmp
+RUN chmod 777 /tmp
 
 USER app
 
