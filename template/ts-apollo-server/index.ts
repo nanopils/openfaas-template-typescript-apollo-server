@@ -45,7 +45,7 @@ const updateApolloStudioSubgraph = async () => {
     }
     const routingUrl = `http://${functionName}:8080/graphql`;
     const graphRef = `${supergraphName}@${profile}`;
-
+    console.log(`Uploading the GraphQL schema of the ${serviceName} service to Apollo Studio`);
     exec(
       `npx apollo service:push \
         --graph="${supergraphName}" \
@@ -66,6 +66,14 @@ const updateApolloStudioSubgraph = async () => {
       },
     );
     console.log(`Updated Apollo Studio schema!`, routingUrl, graphRef, apolloGraphVariant, apolloSchemaReporting);
+  } else {
+    console.log(
+      `The APOLLO_KEY environment variable was not defined, so the schema was not uploaded to Apollo Studio.`,
+    );
+    console.log('--- Defined environment variables:');
+    console.dir(process.env, { depth: 4 });
+    console.log('--- Defined variables:');
+    console.dir(vars, { depth: 4 });
   }
 };
 
