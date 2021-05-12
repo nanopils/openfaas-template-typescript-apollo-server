@@ -30,7 +30,7 @@ const updateApolloStudioSubgraph = async () => {
 
   if (!!apolloKey) {
     const ip = vars?.OPENFAAS_IP || null;
-    const profile = vars?.APOLLO_STUDIO_PROFILE || null;
+    const profile = vars?.APOLLO_GRAPH_VARIANT || null;
     const serviceName = vars?.OPENFAAS_SERVICE_NAME || null;
     const functionName = vars?.OPENFAAS_FUNCTION_NAME || null;
     const supergraphName = vars?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
