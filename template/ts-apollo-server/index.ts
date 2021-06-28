@@ -29,14 +29,12 @@ const updateApolloStudioSubgraph = async () => {
   const apolloSchemaReporting = vars?.APOLLO_SCHEMA_REPORTING;
 
   if (!!apolloKey) {
-    const ip = vars?.OPENFAAS_IP || null;
     const profile = vars?.APOLLO_GRAPH_VARIANT || null;
     const serviceName = vars?.OPENFAAS_SERVICE_NAME || null;
     const functionName = vars?.OPENFAAS_FUNCTION_NAME || null;
     const supergraphName = vars?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
-    if (!ip || !profile || !serviceName || !supergraphName) {
+    if (!profile || !serviceName || !supergraphName) {
       console.error(`You should provide the following in order to update the Apollo Studio subgraph:
-        - OpenFAAS public IP
         - the OpenFAAS function name
         - an Apollo Studio profile name
         - an Apollo Studio supergraph name
