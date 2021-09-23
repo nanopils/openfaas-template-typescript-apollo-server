@@ -29,20 +29,18 @@ const updateApolloStudioSubgraph = async () => {
   const apolloSchemaReporting = vars?.APOLLO_SCHEMA_REPORTING;
 
   if (!!apolloKey) {
-    const profile = vars?.APOLLO_GRAPH_VARIANT || null;
     const serviceName = vars?.OPENFAAS_SERVICE_NAME || null;
     const functionName = vars?.OPENFAAS_FUNCTION_NAME || null;
     const supergraphName = vars?.APOLLO_STUDIO_SUPERGRAPH_NAME || null;
-    if (!profile || !serviceName || !supergraphName) {
+    if (!apolloGraphVariant || !serviceName || !supergraphName) {
       console.error(`You should provide the following in order to update the Apollo Studio subgraph:
         - the OpenFAAS function name
-        - an Apollo Studio profile name
+        - an Apollo Studio variant name
         - an Apollo Studio supergraph name
       `);
       return;
     }
     const routingUrl = `http://${functionName}:8080/graphql`;
-    const graphRef = `${supergraphName}@${profile}`;
     console.log(`Uploading the GraphQL schema of the ${serviceName} service to Apollo Studio`);
     exec(
       `npx apollo service:push \
@@ -63,7 +61,7 @@ const updateApolloStudioSubgraph = async () => {
         }
       },
     );
-    console.log(`Updated Apollo Studio schema!`, routingUrl, graphRef, apolloGraphVariant, apolloSchemaReporting);
+    console.log(`Updated Apollo Studio schema!`, routingUrl, apolloGraphVariant, apolloSchemaReporting);
   } else {
     console.log(
       `The APOLLO_KEY environment variable was not defined, so the schema was not uploaded to Apollo Studio.`,
