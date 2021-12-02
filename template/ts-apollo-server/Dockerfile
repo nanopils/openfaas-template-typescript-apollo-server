@@ -47,7 +47,11 @@ COPY --chown=app:app function/ ./
 # Set correct permissions to use non root user
 WORKDIR /home/app/
 
+# Transpile typescript
 RUN npm run build-ts
+
+# Run any tests that may be available
+RUN npm test
 
 # chmod for tmp is for a buildkit issue (@alexellis)
 RUN chmod 777 /tmp

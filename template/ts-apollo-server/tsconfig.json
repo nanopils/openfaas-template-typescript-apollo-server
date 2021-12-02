@@ -7,10 +7,10 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "target": "es2016",
-    "lib": ["es6", "es7", "esnext"],
-    "outDir": ".",
+    "lib": ["es2019", "es2017", "es7", "es6", "dom", "esnext.asynciterable", "esnext"],
     "moduleResolution": "node",
     "rootDir": ".",
+    "outDir": ".",
     "removeComments": true,
     "noEmitOnError": true,
     "strictFunctionTypes": true,
@@ -24,7 +24,8 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": false,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node", "jest"]
   },
   "exclude": ["node_modules", "test"],
   "include": ["**/*", "buildFederatedSchema.ts"]
