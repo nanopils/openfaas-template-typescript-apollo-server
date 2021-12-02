@@ -35,9 +35,7 @@ COPY --chown=app:app buildFederatedSchema.ts ./
 # entry allows caching of npm install
 
 WORKDIR /home/app/function
-COPY --chown=app:app function/*.json ./
-COPY --chown=app:app function/.npmrc ./
-
+COPY --chown=app:app function/*.json function/.npmrc* ./
 
 RUN npm i || :
 
@@ -47,11 +45,11 @@ COPY --chown=app:app function/ ./
 # Set correct permissions to use non root user
 WORKDIR /home/app/
 
-# Transpile typescript
-RUN npm run build-ts
-
 # Run any tests that may be available
 RUN npm test
+
+# Transpile typescript
+RUN npm run build-ts
 
 # chmod for tmp is for a buildkit issue (@alexellis)
 RUN chmod 777 /tmp
