@@ -11,7 +11,7 @@ export interface IUser {
 
 @ObjectType()
 export class User implements IUser {
-  @Field(() => ID) id: string;
-  @Field({ nullable: true}) firstName: string;
-  @Field({ nullable: true}) lastName: string;
+  @Field() id: string;
+  @Field({ nullable: true }) firstName: string;
+  @Field({ nullable: true }) lastName: string;
 }
