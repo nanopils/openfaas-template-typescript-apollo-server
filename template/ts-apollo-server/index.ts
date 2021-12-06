@@ -58,7 +58,7 @@ const updateApolloStudioSubgraph = async () => {
         APOLLO_KEY=${apolloKey} \
         rover subgraph publish ${apolloGraphRef} \
         --name ${functionName} \
-        --routing-url ${routingUrl} \`
+        --routing-url ${routingUrl} \
         --schema -`,
       (err, stdout, stderr) => {
         if (err) {
