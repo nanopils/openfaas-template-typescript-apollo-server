@@ -54,9 +54,9 @@ const updateApolloStudioSubgraph = async () => {
     const introspectionUrl = 'http://localhost:8080/graphql';
     console.log(`Uploading the GraphQL schema of the ${serviceName} service to Apollo Studio`);
     exec(
-      `rover subgraph introspect ${introspectionUrl} | \
+      `npx rover subgraph introspect ${introspectionUrl} | \
         APOLLO_KEY=${apolloKey} \
-        rover subgraph publish ${apolloGraphRef} \
+        npx rover subgraph publish ${apolloGraphRef} \
         --name ${functionName} \
         --routing-url ${routingUrl} \
         --schema -`,
