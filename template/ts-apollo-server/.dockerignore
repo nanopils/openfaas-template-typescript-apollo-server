@@ -1,0 +1,9 @@
+.git
+node_modules
+lib
+build
+
+**/.git
+**/node_modules
+**/lib
+**/build
