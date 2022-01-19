@@ -104,7 +104,7 @@ const startServer = async () => {
     cacheControl: false,
     tracing: false,
     introspection,
-    context: async ctx => {
+    context: async (ctx: any) => {
       if (typeof context === 'function') {
         return context(ctx);
       }
