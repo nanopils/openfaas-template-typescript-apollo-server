@@ -8,6 +8,7 @@ import { exec } from 'child_process';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildFederatedSchema } from './buildFederatedSchema';
+import { context } from './function/context';
 
 import { authChecker } from './function/auth';
 import resolvers, { orphanedTypes, federationResolvers, getEnvironmentVariables } from './function/resolvers';
@@ -103,6 +104,12 @@ const startServer = async () => {
     cacheControl: false,
     tracing: false,
     introspection,
+    context: async ctx => {
+      if (typeof context === 'function') {
+        return context(ctx);
+      }
+      return {};
+    },
     playground,
     debug,
   });
