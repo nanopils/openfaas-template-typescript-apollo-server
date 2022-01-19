@@ -2,12 +2,7 @@
 
 import 'reflect-metadata';
 import { Field, ID, ObjectType } from 'type-graphql';
-
-export interface IUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-}
+import { IUser } from './types';
 
 @ObjectType()
 export class User implements IUser {
