@@ -8,6 +8,17 @@ RUN apk --no-cache add curl ca-certificates \
     && curl -sSLf https://github.com/openfaas-incubator/of-watchdog/releases/download/0.4.6/of-watchdog > /usr/bin/fwatchdog \
     && chmod +x /usr/bin/fwatchdog
 
+# Allows to build node-rdkafka that is required
+RUN apk add --update --no-cache \
+    bash \
+    g++ \
+    make \
+    py-pip \
+    lz4-dev \
+    musl-dev \
+    cyrus-sasl-dev \
+    openssl-dev
+
 WORKDIR /root/
 
 # Turn down the verbosity to default level.
@@ -37,6 +48,16 @@ WORKDIR /home/app/function
 COPY --chown=app:app function/*.json function/.npmrc* ./
 
 RUN npm i || :
+
+# Delete build packages required by node-rdkafka
+RUN apk del \
+    g++ \
+    make \
+    py-pip \
+    musl-dev \
+    openssl-dev \
+    bash \
+    curl
 
 # COPY function files and folders
 COPY --chown=app:app function/ ./
