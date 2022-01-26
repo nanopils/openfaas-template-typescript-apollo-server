@@ -1,5 +1,3 @@
-/** @format */
-
 import { Arg, Query, Resolver } from 'type-graphql';
 import { IUser, User } from './typeDefs';
 

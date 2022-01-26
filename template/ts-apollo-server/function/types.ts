@@ -1,5 +1,3 @@
-/** @format */
-
 export interface IUser {
   id: string;
   firstName: string;
