@@ -58,7 +58,7 @@ const updateApolloStudioSubgraph = async () => {
       `npx rover subgraph introspect ${introspectionUrl} | \
         APOLLO_KEY=${apolloKey} \
         npx rover subgraph publish ${apolloGraphRef} \
-        --name ${functionName} \
+        --name ${serviceName} \
         --routing-url ${routingUrl} \
         --schema -`,
       (err, stdout, stderr) => {
