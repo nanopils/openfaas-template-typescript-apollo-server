@@ -4,6 +4,7 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "lib": ["es2019", "es2017", "es7", "es6", "dom", "esnext.asynciterable", "esnext"],
     "skipLibCheck": true
   }
 }

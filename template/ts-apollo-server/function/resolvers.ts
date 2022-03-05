@@ -1,5 +1,6 @@
 import { Arg, Query, Resolver } from 'type-graphql';
-import { IUser, User } from './typeDefs';
+import { User } from './typeDefs';
+import { IUser } from './types';
 
 const mockUsers: IUser[] = [
   { id: '123', firstName: 'Bilbo', lastName: 'Baggins' },
