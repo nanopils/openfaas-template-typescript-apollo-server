@@ -26,7 +26,7 @@
   "author": "Nils Perret",
   "license": "ISC",
   "dependencies": {
-    "@apollo/rover": "0.4.1",
+    "@apollo/rover": "0.4.4",
     "apollo-graphql": "^0.9.0",
     "apollo-server-express": "^2.3.3",
     "class-validator": "^0.13.1",
