@@ -21,10 +21,6 @@ export const federationResolvers = {
   User: { __resolveReference: resolveUserReference },
 };
 
-export const getEnvironmentVariables = async (vars = process.env) => ({
-  ...vars,
-});
-
 /**
  * Resolver
  */

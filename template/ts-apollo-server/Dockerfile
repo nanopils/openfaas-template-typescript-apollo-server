@@ -9,15 +9,7 @@ RUN apk --no-cache add curl ca-certificates \
     && chmod +x /usr/bin/fwatchdog
 
 # Allows to build node-rdkafka that is required
-RUN apk add --update --no-cache \
-    bash \
-    g++ \
-    make \
-    py-pip \
-    lz4-dev \
-    musl-dev \
-    cyrus-sasl-dev \
-    openssl-dev
+RUN apk add --update --no-cache bash
 
 WORKDIR /root/
 
@@ -45,19 +37,9 @@ COPY --chown=app:app buildFederatedSchema.ts ./
 # entry allows caching of npm install
 
 WORKDIR /home/app/function
-COPY --chown=app:app function/*.json function/.npmrc* ./
+COPY --chown=app:app function/package.json function/.npmrc* ./
 
 RUN npm i || :
-
-# Delete build packages required by node-rdkafka
-RUN apk del \
-    g++ \
-    make \
-    py-pip \
-    musl-dev \
-    openssl-dev \
-    bash \
-    curl
 
 # COPY function files and folders
 COPY --chown=app:app function/ ./
@@ -94,4 +76,3 @@ ENV read_timeout="15s"
 HEALTHCHECK --interval=3s CMD [ -e /tmp/.lock ] || exit 1
 
 CMD ["fwatchdog"]
-

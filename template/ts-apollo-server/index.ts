@@ -6,10 +6,11 @@ import { exec } from 'child_process';
 import * as express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildFederatedSchema } from './buildFederatedSchema';
-import { context } from './function/context';
 
+import { context } from './function/context';
 import { authChecker } from './function/auth';
-import resolvers, { orphanedTypes, federationResolvers, getEnvironmentVariables } from './function/resolvers';
+import resolvers, { orphanedTypes, federationResolvers } from './function/resolvers';
+import { getEnvironmentVariables } from './function/env-variables';
 
 let vars: { [key: string]: any } = null;
 
@@ -25,10 +26,8 @@ const debugSchemaPath = path.resolve(__dirname, 'schema.gql');
 const loadEnvVariables = async () => {
   const hasFunction = typeof getEnvironmentVariables === 'function';
   if (hasFunction) {
-    return getEnvironmentVariables(process.env).then(variables => {
-      vars = variables;
-      return startServer();
-    });
+    vars = await getEnvironmentVariables(process.env);
+    return startServer();
   }
   vars = { ...process.env };
   return startServer();
@@ -37,7 +36,6 @@ const loadEnvVariables = async () => {
 const updateApolloStudioSubgraph = async () => {
   const apolloKey = vars?.APOLLO_KEY;
   const apolloGraphRef = vars?.APOLLO_GRAPH_REF;
-  const apolloSchemaReporting = vars?.APOLLO_SCHEMA_REPORTING;
 
   if (!!apolloKey) {
     const serviceName = vars?.OPENFAAS_SERVICE_NAME || null;
@@ -49,7 +47,7 @@ const updateApolloStudioSubgraph = async () => {
       `);
       return;
     }
-    const routingUrl = `http://${functionName}:8080/graphql`;
+    const routingUrl = process.env?.APOLLO_ROUTING_URL || `http://${functionName}:8080/graphql`;
     const introspectionUrl = 'http://localhost:8080/graphql';
     console.log(`Uploading the GraphQL schema of the ${serviceName} service to Apollo Studio`);
     exec(
@@ -70,7 +68,7 @@ const updateApolloStudioSubgraph = async () => {
         }
       },
     );
-    console.log(`Updated Apollo Studio schema!`, routingUrl, apolloGraphRef, apolloSchemaReporting);
+    console.log(`Updated Apollo Studio schema!`, routingUrl, apolloGraphRef);
   } else {
     console.log(
       `The APOLLO_KEY environment variable was not defined, so the schema was not uploaded to Apollo Studio.`,
