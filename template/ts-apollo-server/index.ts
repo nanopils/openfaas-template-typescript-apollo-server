@@ -15,9 +15,8 @@ import { getEnvironmentVariables } from './function/env-variables';
 let vars: { [key: string]: any } = null;
 
 const app = express();
-
 const port = process.env?.PORT || 3000;
-
+const requestSizeLimit = process.env?.REQUEST_SIZE_LIMIT || '50mb';
 const debug = !!process.env?.APOLLO_DEBUG ? process.env?.APOLLO_DEBUG === 'true' : false;
 const introspection = !!process.env?.APOLLO_INTROSPECTION ? process.env?.APOLLO_INTROSPECTION === 'true' : true;
 const playground = !!process.env?.APOLLO_PLAYGROUND ? process.env?.APOLLO_PLAYGROUND === 'true' : false;
@@ -116,6 +115,9 @@ const startServer = async () => {
     console.log(`🚀 OpenFaaS GraphQL listening on port: ${port}`);
     await updateApolloStudioSubgraph();
   });
+
+  app.use(express.json({ limit: requestSizeLimit }));
+  app.use(express.urlencoded({ limit: requestSizeLimit }));
 };
 
 loadEnvVariables().catch(error => console.log(error));
