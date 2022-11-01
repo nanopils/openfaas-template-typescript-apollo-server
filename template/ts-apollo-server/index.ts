@@ -108,6 +108,8 @@ const startServer = async () => {
     playground,
     debug,
   });
+  app.use(express.json({ limit: requestSizeLimit }));
+  app.use(express.urlencoded({ limit: requestSizeLimit }));
 
   server.applyMiddleware({ app });
 
@@ -115,9 +117,6 @@ const startServer = async () => {
     console.log(`🚀 OpenFaaS GraphQL listening on port: ${port}`);
     await updateApolloStudioSubgraph();
   });
-
-  app.use(express.json({ limit: requestSizeLimit }));
-  app.use(express.urlencoded({ limit: requestSizeLimit }));
 };
 
 loadEnvVariables().catch(error => console.log(error));
